@@ -185,6 +185,7 @@ func (m *MigrationManager) migrateSystemTables() error {
 }
 
 // migrateTables 批量迁移表
+// migrateTables 批量迁移表
 func (m *MigrationManager) migrateTables(tables []interface{}) error {
 	for _, table := range tables {
 		tableName := getModelTableName(table)
@@ -196,6 +197,11 @@ func (m *MigrationManager) migrateTables(tables []interface{}) error {
 		
 		if tableExists > 0 {
 			log.Printf("  ✓ 表 %s 已存在，跳过创建", tableName)
+			
+			// ⭐ 修复点：对于这俩特殊表，即使存在也直接跳过 AutoMigrate，防止 GORM 去重复补外键导致报错
+			if tableName == "vulnerabilities" || tableName == "vulnerability_attachments" {
+				continue
+			}
 		} else {
 			// 对于 vulnerabilities 表，使用手动创建以确保正确性
 			if tableName == "vulnerabilities" {
@@ -258,7 +264,7 @@ func (m *MigrationManager) createVulnerabilitiesTable() error {
 		impact_scope text,
 		reproduction_steps text,
 		fix_suggestion text,
-		discovered_at datetime DEFAULT CURRENT_TIMESTAMP,
+		discovered_at datetime(3) DEFAULT CURRENT_TIMESTAMP(3),
 		assigned_at datetime(3) DEFAULT NULL,
 		fixed_at datetime(3) DEFAULT NULL,
 		verified_at datetime(3) DEFAULT NULL,
@@ -473,8 +479,8 @@ func (m *MigrationManager) createDefaultAdmin() error {
 	log.Println("   • 登录后请删除 admin_credentials.txt 文件")
 	log.Println("========================================")
 	log.Println("🌐 访问地址:")
-	log.Println("   • http://localhost:8080")
-	log.Println("   • http://127.0.0.1:8080")
+	log.Println("   • http://localhost:82")
+	log.Println("   • http://127.0.0.1:82")
 	log.Println("========================================")
 
 	// 同时保存密码信息到临时文件，方便用户查看

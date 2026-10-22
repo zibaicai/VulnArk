@@ -6,6 +6,7 @@ import (
 	"os"
 	"strings"
 
+	"vulnark/internal/config"
 	"vulnark/internal/repository"
 	"vulnark/pkg/database"
 )
@@ -76,8 +77,8 @@ func (s *initService) InitializeSystem() error {
 		
 		log.Println("========================================")
 		log.Println("🌐 访问地址:")
-		log.Println("   • http://localhost:8080")
-		log.Println("   • http://127.0.0.1:8080")
+		log.Printf("   • http://localhost:%s", config.AppConfig.Server.Port)
+		log.Printf("   • http://127.0.0.1:%s", config.AppConfig.Server.Port)
 		log.Println("========================================")
 	} else {
 		// 创建默认管理员用户
@@ -96,7 +97,7 @@ func (s *initService) InitializeSystem() error {
 		log.Printf("   邮箱: admin@vulnark.com")
 		log.Println("========================================")
 		log.Println("⚠️  请妥善保存管理员密码，首次登录后建议修改！")
-		log.Println("🌐 访问地址: http://localhost:8080")
+		log.Printf("🌐 访问地址: http://localhost:%s", config.AppConfig.Server.Port)
 		log.Println("========================================")
 	}
 

@@ -1,0 +1,20 @@
+方案二：开机自启（宿舍机 24 小时开机必备）
+右键 → 以管理员身份运行 install-service.bat。
+
+它用 Windows 自带的 schtasks 注册一个开机任务（SYSTEM 账号，不需要登录桌面就自动起来），不用下载 NSSM 之类的工具。注册完会立刻启动一次。
+
+取消自启：uninstall-service.bat
+临时停止：stop.bat
+⚠️ 任务计划默认的工作目录不是项目目录，所以专门配了个 deploy\run.bat 先 cd /d 到根目录再启动——不然又会遇到"配置文件读取失败"那个坑。
+
+建议组合
+宿舍机（长期开机）跑方案二，一次配置永久生效；教室机临时演示用方案一。
+
+想更稳（崩溃自动拉起）可以以后装个 NSSM：
+
+plaintext
+
+nssm install VulnArk "D:\VulnArk\vulnark.exe"
+nssm set VulnArk AppDirectory "D:\VulnArk"
+nssm start VulnArk
+文档第八节我也更新成脚本对照表了。同步 deploy\ 整个目录过去就行。

@@ -1,0 +1,46 @@
+services:
+  # ---------- 数据库 ----------
+  mysql:
+    image: mysql:8.0
+    container_name: vulnark-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: "root@123"
+      MYSQL_DATABASE: "vulnark"
+      TZ: "Asia/Shanghai"
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --default-time-zone=+08:00
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-proot@123"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+
+  # ---------- 后端 + 前端（单端口 82） ----------
+  app:
+    build: .
+    image: vulnark:latest
+    container_name: vulnark-app
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports:
+      - "82:82"
+    environment:
+      TZ: "Asia/Shanghai"
+    volumes:
+      # 用 Docker 专用配置（数据库地址指向 mysql 服务名）
+      - ./deploy/config.docker.yaml:/app/configs/config.yaml:ro
+      # 上传的截图/报告附件持久化
+      - app-uploads:/app/uploads
+
+volumes:
+  mysql-data:
+  app-uploads:

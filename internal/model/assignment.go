@@ -16,7 +16,7 @@ type VulnerabilityAssignment struct {
 	AssignerID        uint      `json:"assigner_id" gorm:"not null"`
 	AssignmentType    string    `json:"assignment_type" gorm:"size:20;default:manual"` // manual, auto
 	AssignmentReason  string    `json:"assignment_reason" gorm:"type:text"`
-	AssignedAt        time.Time `json:"assigned_at" gorm:"default:CURRENT_TIMESTAMP"`
+	AssignedAt   	  time.Time `gorm:"type:datetime(3);default:CURRENT_TIMESTAMP(3)" json:"assigned_at"`
 
 	// 关联
 	Vulnerability Vulnerability `json:"vulnerability" gorm:"foreignKey:VulnerabilityID"`

@@ -32,7 +32,7 @@ import (
 // @license.name MIT
 // @license.url https://opensource.org/licenses/MIT
 
-// @host 0.0.0.0:8080
+// @host 0.0.0.0:82
 // @BasePath /
 
 // @securityDefinitions.apikey ApiKeyAuth
@@ -93,6 +93,16 @@ func main() {
 	// 服务前端静态文件
 	r.Static("/assets", "./web/assets")
 	r.StaticFile("/vite.svg", "./web/vite.svg")
+
+	// 服务上传文件（漏洞截图、报告附件等）
+	uploadDir := config.AppConfig.Storage.LocalPath
+	if uploadDir == "" {
+		uploadDir = "./uploads"
+	}
+	if err := os.MkdirAll(uploadDir, 0755); err != nil {
+		logger.Warnf("创建上传目录失败: %v", err)
+	}
+	r.Static("/uploads", uploadDir)
 
 	// 配置JavaScript文件的正确MIME类型
 	r.GET("/config.js", func(c *gin.Context) {

@@ -7,7 +7,7 @@
 
 server:
   host: ""  # 空字符串表示监听所有接口（IPv4和IPv6）
-  port: "8080"
+  port: "82"
   mode: "release"  # debug, release, test - 生产环境请使用release
   read_timeout: 120    # 增加到2分钟
   write_timeout: 120   # 增加到2分钟
@@ -43,7 +43,7 @@ database:
   host: "localhost"
   port: 3306
   username: "root"
-  password: "123456"  # MySQL root密码
+  password: "root@123"  # MySQL root密码
   database: "vulnark"
   charset: "utf8mb4"
 

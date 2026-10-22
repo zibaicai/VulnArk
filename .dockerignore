@@ -1,0 +1,10 @@
+.git
+.workbuddy
+node_modules
+*.log
+mock-server.mjs
+mock-data.mjs
+package.json
+uploads
+README.md
+docs/

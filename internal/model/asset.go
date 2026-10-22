@@ -24,6 +24,15 @@ type Asset struct {
 	Description      string    `json:"description" gorm:"type:text"`
 	Status           int       `json:"status" gorm:"default:1"` // 1-正常，0-下线
 
+	// ---- 展示增强字段（种子数据 / 资产指纹信息）----
+	Company     string `json:"company" gorm:"size:100"`      // 所属公司
+	SystemName  string `json:"system_name" gorm:"size:100"`  // 所属业务系统
+	Environment string `json:"environment" gorm:"size:20"`   // 环境：生产/预发/测试/灾备
+	Fingerprint string `json:"fingerprint" gorm:"size:500"`  // 资产指纹：OS | 中间件 | 框架
+	Services    string `json:"services" gorm:"size:255"`     // 开放服务
+	Middleware  string `json:"middleware" gorm:"size:255"`   // 中间件
+	Framework   string `json:"framework" gorm:"size:255"`    // 开发框架
+
 	// 关联
 	Owner *User `json:"owner,omitempty" gorm:"foreignKey:OwnerID"`
 }
@@ -48,6 +57,14 @@ type AssetCreateRequest struct {
 	BusinessLine    string `json:"business_line"`
 	ImportanceLevel int    `json:"importance_level" binding:"omitempty,oneof=1 2 3"`
 	Description     string `json:"description"`
+	// 展示增强字段
+	Company         string `json:"company"`
+	SystemName      string `json:"system_name"`
+	Environment     string `json:"environment"`
+	Fingerprint     string `json:"fingerprint"`
+	Services        string `json:"services"`
+	Middleware      string `json:"middleware"`
+	Framework       string `json:"framework"`
 }
 
 // AssetUpdateRequest 资产更新请求

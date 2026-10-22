@@ -1,0 +1,73 @@
+# VulnArk Docker 部署专用配置
+# ⚠️ 与 configs/config.yaml 唯一的区别：database.host 指向 compose 里的 mysql 服务名
+# ⚠️ 上线前务必修改 jwt.secret 与 database.password
+
+server:
+  host: ""          # 空 = 监听 0.0.0.0
+  port: "82"
+  mode: "release"   # debug / release / test
+  read_timeout: 120
+  write_timeout: 120
+
+cors:
+  enabled: true
+  allowed_origins:
+    - "*"
+  allowed_methods:
+    - "GET"
+    - "POST"
+    - "PUT"
+    - "PATCH"
+    - "DELETE"
+    - "HEAD"
+    - "OPTIONS"
+  allowed_headers:
+    - "Origin"
+    - "Content-Length"
+    - "Content-Type"
+    - "Authorization"
+    - "X-Requested-With"
+    - "Accept"
+  exposed_headers:
+    - "Content-Length"
+    - "Content-Type"
+    - "Authorization"
+  allow_credentials: true
+  max_age: 43200
+
+database:
+  host: "mysql"     # ← Docker 网络内的 mysql 服务名，不要改
+  port: 3306
+  username: "root"
+  password: "root@123"
+  database: "vulnark"
+  charset: "utf8mb4"
+
+jwt:
+  secret: "ky6oJtR8MlYpMzJxhaVjWI1O4yeVUbkIJkJdGBzUt89lWifjWuZ1VDgqi68ciRKU"  # ⚠️ 请替换
+  expire_time: 3600
+
+oss:
+  provider: "local"
+  access_key_id: ""
+  access_key_secret: ""
+  bucket: "vulnark-files"
+  endpoint: ""
+  region: ""
+
+email:
+  host: "smtp.qq.com"
+  port: 587
+  username: ""
+  password: ""
+  from: ""
+
+storage:
+  type: "local"
+  local_path: "./uploads"
+  base_url: "/uploads"
+
+log:
+  level: "info"
+  format: "json"
+  output: "stdout"

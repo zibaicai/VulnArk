@@ -1,0 +1,9 @@
+{
+  "name": "vulnark-mock",
+  "private": true,
+  "type": "module",
+  "description": "仅用于让 Node 以 ESM 方式解析前端数据文件（mock-server.mjs 联调用），与 Go 后端无关",
+  "scripts": {
+    "mock": "node mock-server.mjs"
+  }
+}
