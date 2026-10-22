@@ -16,6 +16,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"vulnark/internal/config"
@@ -162,7 +163,12 @@ func main() {
 	// 新增展示字段（指纹 / 环境 / 漏洞类型等）需要补列
 	log.Println("🔧 同步表结构（新增展示字段）...")
 	if err := db.AutoMigrate(&model.Asset{}, &model.Vulnerability{}); err != nil {
-		log.Fatalf("表结构同步失败: %v", err)
+		// GORM 遍历时会尝试删除不存在的旧约束（如 uni_roles_name），与迁移管理器一致，忽略此类预期错误
+		if strings.Contains(err.Error(), "Can't DROP") && strings.Contains(err.Error(), "check that column/key exists") {
+			log.Printf("⚠️  忽略预期的约束错误: %v", err)
+		} else {
+			log.Fatalf("表结构同步失败: %v", err)
+		}
 	}
 
 	raw, err := os.ReadFile(*file)
