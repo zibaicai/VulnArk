@@ -1,0 +1,12 @@
+# ===== 本地构建产物 =====
+dist/
+vulnark
+vulnark.exe
+*.log
+
+# ===== 运行时生成的凭据（含明文密码，禁止入库）=====
+cmd/admin_credentials.txt
+admin_credentials.txt
+
+# ===== 本地工具/临时产物 =====
+.workbuddy/

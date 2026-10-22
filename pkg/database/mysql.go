@@ -27,8 +27,10 @@ func InitDatabase() {
 	)
 
 	// 配置GORM
+		// 配置GORM
 	gormConfig := &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
+		DisableForeignKeyConstraintWhenMigrating: true, // ⭐ 加上这一行：迁移时禁用外键约束生成
 		NowFunc: func() time.Time {
 			return time.Now().Local()
 		},
@@ -69,9 +71,9 @@ func InitDatabase() {
 		log.Fatalf("获取数据库实例失败: %v", err)
 	}
 
-	// 设置连接池参数
-	sqlDB.SetMaxIdleConns(10)           // 最大空闲连接数
-	sqlDB.SetMaxOpenConns(100)          // 最大打开连接数
+	// 设置连接池参数（小规格单机部署，避免占满 MySQL max_connections）
+	sqlDB.SetMaxIdleConns(5)            // 最大空闲连接数
+	sqlDB.SetMaxOpenConns(25)           // 最大打开连接数
 	sqlDB.SetConnMaxLifetime(time.Hour) // 连接最大生存时间
 
 	// 测试连接
